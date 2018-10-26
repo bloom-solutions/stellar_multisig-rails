@@ -49,4 +49,62 @@ RSpec.describe "totp" do
     end
   end
 
+  describe "POST /api/v1/totp/verify" do
+    let(:otp_secret) { ROTP::Base32.random_base32 }
+    let(:totp) { ROTP::TOTP.new(otp_secret) }
+
+    before do
+      create(:stellar_multisig_totp, {
+        address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
+        passphrase: "jollyman",
+        otp_secret: otp_secret,
+      })
+    end
+
+    context "correct OTP and password" do
+      it "responds with 200" do
+        post("/api/v1/totp", {
+          params: {
+            address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
+            passphrase: "jollyman",
+            otp: totp.now,
+          }
+        })
+
+        expect(response).to be_successful
+        expect(response.code).to eq 200
+      end
+    end
+
+    context "incorrect OTP and correct password" do
+      it "responds with 401" do
+        post("/api/v1/totp", {
+          params: {
+            address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
+            passphrase: "jollyman",
+            otp: "123456",
+          }
+        })
+
+        expect(response).to_not be_successful
+        expect(response.code).to eq 401
+      end
+    end
+
+    context "correct OTP and incorrect password" do
+      it "responds with 401" do
+        post("/api/v1/totp", {
+          params: {
+            address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
+            passphrase: "xxxxyman",
+            otp: totp.now,
+          }
+        })
+
+        expect(response).to_not be_successful
+        expect(response.code).to eq 401
+      end
+    end
+  end
+
 end
