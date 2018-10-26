@@ -1,0 +1,11 @@
+---
+# Sender must have the signer_address as a signer to it with the following settings:
+# - master weight: 80
+# - low threshold: 50
+# - medium: 100
+# - high: 200
+# - signer weight: 70
+sender_address: change me to a funded account
+sender_seed: change me to a funded account
+signer_address: change me to a funded account
+signer_seed: change me to a funded account
