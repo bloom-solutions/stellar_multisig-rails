@@ -1,3 +1,5 @@
+require 'rotp'
+
 RSpec.describe "totp" do
 
   describe "POST /api/v1/totp" do
