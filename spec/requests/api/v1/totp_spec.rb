@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'rotp'
 
 RSpec.describe "totp" do
 
@@ -13,7 +13,7 @@ RSpec.describe "totp" do
       it "responds with `conflict`" do
         post("/api/v1/totp", {
           params: {
-            address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7"
+            address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
             passphrase: "jollyman",
           }
         })
