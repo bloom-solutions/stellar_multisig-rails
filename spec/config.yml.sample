@@ -5,6 +5,7 @@
 # - medium: 100
 # - high: 200
 # - signer weight: 70
+address: change me
 sender_address: change me to a funded account
 sender_seed: change me to a funded account
 signer_address: change me to a funded account
