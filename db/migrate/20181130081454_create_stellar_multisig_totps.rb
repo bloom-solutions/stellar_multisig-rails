@@ -1,6 +1,6 @@
-class CreateStellarMultisigRailsTotps < ActiveRecord::Migration[5.2]
+class CreateStellarMultisigTotps < ActiveRecord::Migration[5.2]
   def change
-    create_table :stellar_multisig_rails_totps do |t|
+    create_table :stellar_multisig_totps do |t|
       t.string :address
       t.string :passphrase
       t.string :otp_secret, :null => true

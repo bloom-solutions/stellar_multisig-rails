@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_16_153604) do
+ActiveRecord::Schema.define(version: 2018_11_30_081454) do
 
-  create_table "stellar_multisig_rails_totps", force: :cascade do |t|
+  create_table "stellar_multisig_totps", force: :cascade do |t|
     t.string "address"
     t.string "passphrase"
     t.string "otp_secret"

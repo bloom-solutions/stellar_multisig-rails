@@ -1,3 +1,3 @@
 FactoryBot.define do
-  factory :stellar_multisig_totp, class: StellarMultisig::Rails::Totp
+  factory :stellar_multisig_totp, class: StellarMultisig::Totp
 end

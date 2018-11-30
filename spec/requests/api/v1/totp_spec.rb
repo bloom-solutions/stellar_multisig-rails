@@ -11,7 +11,7 @@ RSpec.describe "totp" do
       end
 
       it "responds with `conflict`" do
-        post("/api/v1/totp", {
+        post("/stellar_multisig/api/v1/totp", {
           params: {
             address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
             passphrase: "jollyman",
@@ -25,7 +25,7 @@ RSpec.describe "totp" do
 
     context "TOTP does not exist" do
       it "returns a totp provisioning_uri for the given address" do
-        post("/api/v1/totp", {
+        post("/stellar_multisig/api/v1/totp", {
           params: {
             address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
             passphrase: "jollyman",
@@ -63,7 +63,7 @@ RSpec.describe "totp" do
 
     context "correct OTP and password" do
       it "responds with 200" do
-        post("/api/v1/totp", {
+        post("/stellar_multisig/api/v1/totp", {
           params: {
             address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
             passphrase: "jollyman",
@@ -78,7 +78,7 @@ RSpec.describe "totp" do
 
     context "incorrect OTP and correct password" do
       it "responds with 401" do
-        post("/api/v1/totp", {
+        post("/stellar_multisig/api/v1/totp", {
           params: {
             address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
             passphrase: "jollyman",
@@ -93,7 +93,7 @@ RSpec.describe "totp" do
 
     context "correct OTP and incorrect password" do
       it "responds with 401" do
-        post("/api/v1/totp", {
+        post("/stellar_multisig/api/v1/totp", {
           params: {
             address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
             passphrase: "xxxxyman",

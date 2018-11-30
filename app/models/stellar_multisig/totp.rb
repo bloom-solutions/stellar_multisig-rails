@@ -1,4 +1,4 @@
-module StellarMultisig::Rails
+module StellarMultisig
   class Totp < ApplicationRecord
   end
 end

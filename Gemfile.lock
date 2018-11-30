@@ -4,7 +4,7 @@ PATH
     stellar_multisig-rails (0.1.0)
       addressable
       rails (~> 5.2.1)
-      rbnacl (~> 5.0.0)
+      rbnacl (< 6.0)
       rotp
       stellar-sdk
 
@@ -71,7 +71,7 @@ GEM
     factory_bot_rails (4.11.1)
       factory_bot (~> 4.11.1)
       railties (>= 3.0.0)
-    faraday (0.15.3)
+    faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     faraday-digestauth (0.3.0)
       faraday (~> 0.7)
