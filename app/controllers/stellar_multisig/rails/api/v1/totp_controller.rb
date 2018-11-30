@@ -3,6 +3,7 @@ require_dependency "stellar_multisig/rails/application_controller"
 module StellarMultisig::Rails
   class Api::V1::TotpController < ApplicationController
     before_action :totp_dont_exist, only: [:create]
+    before_action :totp_must_exist, only: [:verify]
 
     def create
       address = totp_params["address"]
@@ -18,10 +19,18 @@ module StellarMultisig::Rails
       }
     end
 
+    def verify
+      sm_totp = StellarMultisig::Totp.find_by(address: totp_params["address"])
+      totp = make_totp(sm_totp.otp_secret, sm_totp.address)
+      head 401 and return if totp.verify(totp_params["otp"]).nil?
+      head 401 and return if sm_totp.passphrase != totp_params["passphrase"]
+      head 200
+    end
+
     private
 
     def totp_params
-      params.permit(:address, :passphrase, :otp_secret, :verified_at)
+      params.permit(:address, :passphrase, :otp)
     end
 
     def make_totp(otp_secret, address)
@@ -29,7 +38,15 @@ module StellarMultisig::Rails
     end
 
     def totp_dont_exist
-      head 409 and return if StellarMultisig::Totp.exists?(address: totp_params["address"])
+      head 409 and return if totp_exists?
+    end
+
+    def totp_must_exist
+      head 404 and return unless totp_exists?
+    end
+
+    def totp_exists?
+      StellarMultisig::Totp.exists?(address: totp_params["address"])
     end
   end
 end

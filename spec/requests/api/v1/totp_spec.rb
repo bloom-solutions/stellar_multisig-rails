@@ -64,6 +64,21 @@ RSpec.describe "totp" do
       })
     end
 
+    context "TOTP does not exist" do
+      it "responds with 404" do
+        post("/stellar_multisig/api/v1/totp/verify", {
+          params: {
+            address: "example",
+            passphrase: "jollyman",
+            otp: totp.now
+          }
+        })
+
+        expect(response).to_not be_successful
+        expect(response.code.to_i).to eq 404
+      end
+    end
+
     context "correct OTP and password" do
       it "responds with 200" do
         post("/stellar_multisig/api/v1/totp/verify", {
@@ -75,7 +90,7 @@ RSpec.describe "totp" do
         })
 
         expect(response).to be_successful
-        expect(response.code).to eq 200
+        expect(response.code.to_i).to eq 200
       end
     end
 
@@ -90,7 +105,7 @@ RSpec.describe "totp" do
         })
 
         expect(response).to_not be_successful
-        expect(response.code).to eq 401
+        expect(response.code.to_i).to eq 401
       end
     end
 
@@ -105,7 +120,7 @@ RSpec.describe "totp" do
         })
 
         expect(response).to_not be_successful
-        expect(response.code).to eq 401
+        expect(response.code.to_i).to eq 401
       end
     end
   end
