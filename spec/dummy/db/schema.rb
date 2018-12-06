@@ -14,7 +14,7 @@ ActiveRecord::Schema.define(version: 2018_11_30_081454) do
 
   create_table "stellar_multisig_totps", force: :cascade do |t|
     t.string "address"
-    t.string "passphrase"
+    t.string "passphrase_hash"
     t.string "otp_secret"
     t.datetime "verified_at"
     t.datetime "created_at", null: false

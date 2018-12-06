@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency "stellar-sdk"
   s.add_dependency "rotp"
   s.add_dependency "addressable"
+  s.add_dependency "bcrypt"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

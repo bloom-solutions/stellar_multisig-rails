@@ -24,6 +24,7 @@ module StellarMultisig::Rails
       totp = make_totp(sm_totp.otp_secret, sm_totp.address)
       head 401 and return if totp.verify(totp_params["otp"]).nil?
       head 401 and return if sm_totp.passphrase != totp_params["passphrase"]
+      sm_totp.verified_at = Time.now
       head 200
     end
 

@@ -3,6 +3,7 @@ PATH
   specs:
     stellar_multisig-rails (0.1.0)
       addressable
+      bcrypt
       rails (~> 5.2.1)
       rbnacl (< 6.0)
       rotp
@@ -56,6 +57,7 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     arel (9.0.0)
     base32 (0.3.2)
+    bcrypt (3.1.12)
     builder (3.2.3)
     byebug (10.0.2)
     citrus (3.0.2)
