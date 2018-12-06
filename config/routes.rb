@@ -7,6 +7,11 @@ StellarMultisig::Rails::Engine.routes.draw do
             post 'verify'
           end
         end
+
+        scope '/tx' do
+          get 'fee', to: 'tx#fee'
+          post 'sign', to: 'tx#sign'
+        end
       end
     end
   end
