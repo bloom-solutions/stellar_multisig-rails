@@ -2,6 +2,10 @@ require 'rotp'
 
 RSpec.describe "totp" do
 
+  # TODO
+  # - add a way to verify that user has control of the seed via something like
+  #   signed_passphrase: "THIS IS SIGNED jollyman"
+  # - what happens when creating totp record fails?
   describe "POST /api/v1/totp" do
     let (:address) { CONFIG[:address] }
 
