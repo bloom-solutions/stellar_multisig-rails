@@ -4,17 +4,17 @@ RSpec.describe "totp" do
 
   describe "POST /api/v1/totp" do
     context "TOTP was already created" do
+      let(:account) { Stellar::Account.random }
       before do
-        create(:stellar_multisig_totp, {
-          address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
-        })
+        create(:stellar_multisig_totp, address: account.address)
       end
 
       it "responds with `conflict`" do
         post("/api/v1/totp", {
           params: {
-            address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
+            address: account.address,
             passphrase: "jollyman",
+            signed_passphrase: account.keypair.sign("jollyman"),
           }
         })
 
@@ -23,12 +23,18 @@ RSpec.describe "totp" do
       end
     end
 
-    context "TOTP does not exist" do
+    context(
+      "TOTP does not exist, " \
+      "signed_passphrase is signed by the address owner"
+    ) do
+      let(:account) { Stellar::Account.random }
+
       it "returns a totp provisioning_uri for the given address" do
         post("/api/v1/totp", {
           params: {
-            address: "GDEL7NYMHKZWLAWAZNXMOKP7GG52QECJQAR33KMEN2G6TC4VV3C4ISA7",
+            address: account.address,
             passphrase: "jollyman",
+            signed_passphrase: account.keypair.sign("jollyman"),
           }
         })
 
@@ -42,9 +48,35 @@ RSpec.describe "totp" do
         parsed_provisioning_uri = Addressable::URI.parse(provisioning_uri)
         expect(parsed_provisioning_uri.scheme).to eq "otpauth"
         expect(parsed_provisioning_uri.host).to eq "totp"
-        expect(parsed_provisioning_uri.path).
-          to eq "/issuer:#{ENV["OTP_ISSUER"]}: DEL...SA7"
+        expected_address_abbrev = [
+          account_1.address[0..2],
+          account_1.address[-3..-1],
+        ].join("...")
+        expected_path =
+          "/issuer:#{ENV["OTP_ISSUER"]}: #{expected_address_abbrev}"
+        expect(parsed_provisioning_uri.path).to eq expected_path
         expect(parsed_provisioning_uri.query_params["secret"]).to be_present
+      end
+    end
+
+    context(
+      "TOTP does not exist, " \
+      "signed_passphrase is not signed by the address owner"
+    ) do
+      let(:account_1) { Stellar::Account.random }
+      let(:account_2) { Stellar::Account.random }
+
+      it "responds with 401" do
+        post("/api/v1/totp", {
+          params: {
+            address: account_1.address,
+            passphrase: "jollyman",
+            signed_passphrase: account_2.keypair.sign("jollyman"),
+          }
+        })
+
+        expect(response).to_not be_successful
+        expect(response.code).to eq 401
       end
     end
   end
