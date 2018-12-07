@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     stellar_multisig-rails (0.1.0)
-      addressable (~> 2.5.2)
+      addressable
       rails (~> 5.2.1)
       rotp
 
@@ -156,4 +156,4 @@ DEPENDENCIES
   stellar_multisig-rails!
 
 BUNDLED WITH
-   1.16.4
+   1.16.6
