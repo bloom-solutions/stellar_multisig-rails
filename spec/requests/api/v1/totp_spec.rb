@@ -1,4 +1,5 @@
 require 'rotp'
+require 'stellar-sdk'
 
 RSpec.describe "totp" do
 
@@ -52,14 +53,11 @@ RSpec.describe "totp" do
         parsed_provisioning_uri = Addressable::URI.parse(provisioning_uri)
         expect(parsed_provisioning_uri.scheme).to eq "otpauth"
         expect(parsed_provisioning_uri.host).to eq "totp"
-        expected_address_abbrev = [
-          account_1.address[0..2],
-          account_1.address[-3..-1],
-        ].join("...")
-        expected_path =
-          "/issuer:#{ENV["OTP_ISSUER"]}: #{expected_address_abbrev}"
+
+        expected_path = "/#{account.address}:#{account.address}"
         expect(parsed_provisioning_uri.path).to eq expected_path
-        expect(parsed_provisioning_uri.query_params["secret"]).to be_present
+        expect(parsed_provisioning_uri.query_values["secret"]).to be_present
+        expect(parsed_provisioning_uri.query_values["issuer"]).to eq "#{account.address}"
       end
     end
 
@@ -71,7 +69,7 @@ RSpec.describe "totp" do
       let(:account_2) { Stellar::Account.random }
 
       it "responds with 401" do
-        post("/api/v1/totp", {
+        post("/stellar_multisig/api/v1/totp", {
           params: {
             address: account_1.address,
             passphrase: "jollyman",
@@ -80,7 +78,7 @@ RSpec.describe "totp" do
         })
 
         expect(response).to_not be_successful
-        expect(response.code).to eq 401
+        expect(response.code.to_i).to eq 401
       end
     end
   end
