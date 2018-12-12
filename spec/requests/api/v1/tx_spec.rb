@@ -1,3 +1,6 @@
+require 'rotp'
+require 'stellar-sdk'
+
 RSpec.describe "Transaction signing" do
 
   describe "GET /api/v1/tx/fee" do
